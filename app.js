@@ -5,6 +5,16 @@ const app = express();
 //Utilisation du package body-parser  pour transformer le corps de requête en JSON
 const bodyParser = require('body-parser');
 
+//Utilisation du package Mongoose pour interactions avec base sur MongoDB
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://P6:MyP@ssw0rd@gmlesfrites.o009d.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
+
 //Middleware pour autoriser certains headers
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
