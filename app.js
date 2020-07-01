@@ -2,6 +2,9 @@
 const express = require('express');
 const app = express();
 
+//Utilisation du package body-parser  pour transformer le corps de requête en JSON
+const bodyParser = require('body-parser');
+
 //Middleware pour autoriser certains headers
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,6 +12,14 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+//Middleware utilisation bodyParser
+app.use(bodyParser.json());
+
+//Middleware POST -> exemple
+app.post((req, res, next) => {
+    res.status(201).json({ message: 'objet créé' });
+})
 
 //Middleware classique -> ôter next si dernier middleware
 app.use((req, res, next) => {
