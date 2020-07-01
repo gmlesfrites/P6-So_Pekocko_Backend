@@ -1,3 +1,4 @@
+//Création des constantes pour http et utilisation app -> Express
 const http = require('http');
 const app = require('./app');
 
@@ -37,6 +38,7 @@ const errorHandler = error => {
     }
 };
 
+//Création du serveur -> lien avec Express
 const server = http.createServer(app);
 
 // Exécution du serveur
