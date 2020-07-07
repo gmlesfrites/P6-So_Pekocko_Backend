@@ -1,5 +1,7 @@
+//Importation de mongoose
 const mongoose = require('mongoose');
 
+//création du schéma des infos à stocker
 const sauceSchema = mongoose.Schema({
     name: { type: String, required: true },
     manufacturer: { type: String, required: true },
@@ -13,4 +15,5 @@ const sauceSchema = mongoose.Schema({
     usersDisliked: { type: [String], required: true },
 });
 
+//Création du modèle Sauce
 module.exports = mongoose.model('Sauce', sauceSchema);
