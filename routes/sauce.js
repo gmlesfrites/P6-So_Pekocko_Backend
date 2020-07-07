@@ -3,21 +3,21 @@ const express = require('express');
 const router = express.Router();
 
 //nécessite le fichier sauce du dossier controllers
-const routeControllers = require('../controllers/sauce')
+const sauceControllers = require('../controllers/sauce')
 
 //route pour afficher toutes les sauces
-router.get('/', routeControllers.createSauces);
+router.get('/', sauceControllers.createSauces);
 
 //route pour créer une sauce
-router.post('/', routeControllers.createSauce);
+router.post('/', sauceControllers.createSauce);
 
 //route pour afficher les sauces par id
-router.get('/:id', routeControllers.createOneSauce);
+router.get('/:id', sauceControllers.createOneSauce);
 
 //route pour modifier les sauces par id
-router.put('/:id', routeControllers.modifySauce);
+router.put('/:id', sauceControllers.modifySauce);
 
 //route pour supprimer les sauces par id
-router.delete('/:id', routeControllers.deleteSauce);
+router.delete('/:id', sauceControllers.deleteSauce);
 
 module.exports = router;

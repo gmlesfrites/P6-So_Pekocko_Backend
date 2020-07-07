@@ -2,8 +2,9 @@
 const express = require('express');
 const app = express();
 
-//Importation de la route sauce
+//Importation des routes
 const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
 
 //Importation du package body-parser 
 const bodyParser = require('body-parser');
@@ -32,8 +33,9 @@ app.use((req, res, next) => {
 //Middleware utilisation bodyParser
 app.use(bodyParser.json());
 
-//middleware utilisation de la route sauce
-app.use('/api/sauces', sauceRoutes)
+//middleware utilisation des routes
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
 //Export de l'app Express pour utilisation server.js
 module.exports = app;
