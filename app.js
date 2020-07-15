@@ -1,10 +1,9 @@
+// Importation du package dotenv
+const dotenv = require('dotenv').config();
+
 //Création du serveur avec framework Express
 const express = require('express');
 const app = express();
-
-//Importation des routes
-const sauceRoutes = require('./routes/sauce');
-const userRoutes = require('./routes/user');
 
 //Importation du package body-parser 
 const bodyParser = require('body-parser');
@@ -12,9 +11,15 @@ const bodyParser = require('body-parser');
 //Importation du package mongoose pour interactions avec base MongoDB
 const mongoose = require('mongoose');
 
+//Importation du chemin du fichier images
+const path = require('path');
+
+//Importation des routes
+const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
+
 //connexion à MongoDB
-//TODO souci sécu on voit le mot de passe
-mongoose.connect('mongodb+srv://P6:MyP@ssw0rd@gmlesfrites.o009d.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority',
+mongoose.connect( process.env.MONGO_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -32,6 +37,9 @@ app.use((req, res, next) => {
 
 //Middleware utilisation bodyParser
 app.use(bodyParser.json());
+
+//middleware pour l'accès aux ressources statiques
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //middleware utilisation des routes
 app.use('/api/sauces', sauceRoutes);

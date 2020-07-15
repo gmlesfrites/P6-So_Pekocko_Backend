@@ -1,3 +1,6 @@
+// Importation du package dotenv
+const dotenv = require('dotenv').config();
+
 //Importation du package bcrypt
 const bcrypt = require('bcrypt');
 
@@ -20,7 +23,7 @@ exports.signup = (req, res, next) => {
             //Sauvegarde dans la base de données
             user.save()
                 .then(() => res.status(201).json({ message : 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ error }))
+                .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({error}));
 };
@@ -44,8 +47,7 @@ exports.login = (req, res, next) => {
                         token: jsonwebtoken.sign(
                             //vérification de l'identifiant utilisateur
                             { userId: user._id},
-                            // TODO à remplacer par un string aléatoire
-                            'random_token_secret',
+                            process.env.TOKEN,
                             //token valable 24h
                             {expiresIn: '24h'}
                         )
