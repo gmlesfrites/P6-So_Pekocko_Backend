@@ -22,6 +22,7 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 //connexion à MongoDB
+// TODO après avoir cloné le repo, créer un fichier .env pour y enregistrer MONGO_URL (url de la BDD avec identifiant et mdp)
 mongoose.connect( process.env.MONGO_URL,
     {
         useNewUrlParser: true,
