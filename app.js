@@ -1,6 +1,9 @@
 // Importation du package dotenv
 const dotenv = require('dotenv').config();
 
+// Importation du package Helmet (sécurité recommandée par Express)
+const helmet = require ('helmet');
+
 //Création du serveur avec framework Express
 const express = require('express');
 const app = express();
@@ -34,6 +37,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// Middleware utilisation helmet
+app.use(helmet());
 
 //Middleware utilisation bodyParser
 app.use(bodyParser.json());
