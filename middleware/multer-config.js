@@ -3,9 +3,9 @@ const multer = require('multer');
 
 //gestion du type MIME des fichiers images 
 const MIME_TYPES = {
-    'image/jpg' : 'jpg',
-    'image/jpeg': 'jpg',
-    'image/png' : 'png'
+    'images/jpg' : 'jpg',
+    'images/jpeg': 'jpg',
+    'images/png' : 'png'
 };
 
 //Pour l'enregistrement des images

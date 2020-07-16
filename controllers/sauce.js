@@ -1,5 +1,5 @@
 const Sauce = require("../models/Sauce"); //Importation du modèle sauce
-const filesystem = require('fs'); //Importation du package fs
+const filesystem = require('fs'); //Importation du package fs(pour suppression des fichiers importés)
 
 //Middleware de création d'une sauce - route L15
 exports.createSauce = (req, res, next) => {
@@ -9,7 +9,7 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         //pour récupérer l'url complète de l'image
-        imageUrl: `$(req.protocol)://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'sauce enregistrée !' }))
@@ -30,7 +30,7 @@ exports.modifySauce = (req, res, next) => {
         {
             ...JSON.parse(req.body.sauce),
             //pour récupérer l'url complète de l'image
-            imageUrl: `$(req.protocol)://${req.get('host')}/images/${req.file.filename}`
+            imageUrl: `$${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
@@ -46,13 +46,11 @@ exports.deleteSauce = (req, res, next) => {
             //suppression du fichier image puis de la sauce
             filesystem.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({ _id: req.params.id })
-                    .then(() => { res.status(200).json({ message: 'Deleted!' }); })
+                    .then(() => { res.status(200).json({ message: 'Sauce supprimée!' }); })
                     .catch((error) => { res.status(400).json({ error: error }); });
-            } )
+            })
         })
         .catch(error => res.status(500).json({ error }));
-
-    
 };
 
 //Middleware de récupération des sauces - route L27
@@ -60,4 +58,36 @@ exports.createSauces = (req, res, next) => {
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
+};
+
+// Middleware pour like et dislike - route L32 
+exports.sauceLikeOrDislike = (req, res, next) => {
+    // S'il y a déjà des 'like' et si un utilisateur en + aime la sauce
+    if (req.body.like === 1) {
+        Sauce.updateOne({ _id: req.params.id }, {$inc: {likes: req.body.like++} , $push: {usersLiked: req.body.userId}})
+            .then (sauce => res.status(200).json({ message: "Un utilisateur en + aime cette sauce !"}))
+            .catch(error => res.status(400).json({ error }));
+
+    // S'il y a déjà des 'dislike' et  si un utilisateur en + n'aime pas la sauce 
+    } else if (req.body.like === -1) {
+        Sauce.updateOne({ _id: req.params.id },  {$inc: {dislikes: (req.body.like++)*-1} ,$push: {usersDisliked: req.body.userId}})
+            .then (sauce => res.status(200).json({ message: "Un utilisateur en + n'aime pas cette sauce !"}))
+            .catch(error => res.status(400).json({ error }));
+
+    // s'il n'y a pas de 'like'
+    } else { 
+        Sauce.findOne({_id: req.params.id})
+            .then(sauce => {
+                if (sauce.usersLiked.includes(req.body.userId)) {
+                    Sauce.updateOne({_id: req.params.id}, {$pull: {usersLiked: req.body.userId}, $inc: {likes: -1}})
+                    .then(sauce => res.status(200).json({ message: 'un "like" en moins !'})) 
+                    .catch(error => res.status(400).json({ error }))
+                } else if (sauce.usersDisliked.includes(req.body.userId)) {
+                    Sauce.updateOne({_id: req.params.id}, {$pull: {usersDisliked: req.body.userId}, $inc: {dislikes: -1}})
+                    .then(sauce => res.status(200).json({ message: 'un "dislike" en moins !'})) 
+                    .catch(error => res.status(400).json({ error }))  
+                }
+            })
+            .catch(error => res.status(400).json({ error }));
+    }
 };

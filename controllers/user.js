@@ -4,6 +4,9 @@ const dotenv = require('dotenv').config();
 //Importation du package bcrypt
 const bcrypt = require('bcrypt');
 
+// Immportation du package express-rate-limit qui va empêcher la force brute
+const expressRateLimit = require('express-rate-limit');
+
 //Importation du package jsonwebtoken
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -47,6 +50,7 @@ exports.login = (req, res, next) => {
                         token: jsonwebtoken.sign(
                             //vérification de l'identifiant utilisateur
                             { userId: user._id},
+                            // TODO TOKEN qu'on retrouve dans .env
                             process.env.TOKEN,
                             //token valable 24h
                             {expiresIn: '24h'}
@@ -58,3 +62,9 @@ exports.login = (req, res, next) => {
         //si problème de connexion serveur
         .catch(error => res.status(500).json({ error }));
 };
+
+// Middleware limitation de demandes (5 par minute)
+exports.limiter = expressRateLimit ({
+    windowMs: 60 * 1000,
+    max: 5
+})

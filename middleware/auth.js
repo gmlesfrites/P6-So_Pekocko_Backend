@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
         // récupération du token
         const token = req.headers.authorization.split(' ')[1];
 
+        // TODO après avoir cloné le repo, créer un fichier .env pour y enregistrer le TOKEN
         const readToken = jsonwebtoken.verify(token, process.env.TOKEN);
         const userId = readToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
