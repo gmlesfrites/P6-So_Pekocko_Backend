@@ -1,5 +1,5 @@
 const Sauce = require("../models/Sauce"); //Importation du modèle sauce
-const filesystem = require('fs'); //Importation du package fs(pour suppression des fichiers importés)
+const filesystem = require('fs'); //Importation du package fs(gestion fichiers importés)
 
 //Middleware de création d'une sauce - route L15
 exports.createSauce = (req, res, next) => {
