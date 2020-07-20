@@ -50,7 +50,6 @@ exports.login = (req, res, next) => {
                         token: jsonwebtoken.sign(
                             //vérification de l'identifiant utilisateur
                             { userId: user._id},
-                            // TODO après avoir cloné le repo, créer un fichier .env pour y enregistrer le TOKEN
                             process.env.TOKEN,
                             //token valable 24h
                             {expiresIn: '24h'}
