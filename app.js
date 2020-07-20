@@ -4,6 +4,9 @@ const dotenv = require('dotenv').config();
 // Importation du package Helmet (sécurité recommandée par Express)
 const helmet = require ('helmet');
 
+// Importation middleware utilisation express-session
+const manageCookie = require('./middleware/manageCookie');
+
 //Création du serveur avec framework Express
 const express = require('express');
 const app = express();
@@ -43,6 +46,9 @@ app.use(helmet());
 
 //Middleware utilisation bodyParser
 app.use(bodyParser.json());
+
+//Middleware gestion des cookies
+app.use(manageCookie);
 
 //middleware pour l'accès aux ressources statiques
 app.use('/images', express.static(path.join(__dirname, 'images')));
