@@ -16,6 +16,12 @@ const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, 'images');
     },
+    //nom et extension du fichier + ajout timestamp pour creation d'un fichier daté
+    filename: (req, file, callback) => {
+        const name = file.originalname.split(' ').join('_');
+        const extension = MIME_TYPES[file.mimetype];
+        callback(null, name + Date.now() + '.' + extension);
+    },
     // Pour bloquer les fichiers autres que jpg, jpeg, tiff, gif et png
     fileFilter: function (req, file, callback) {
         const extension = path.extname(file.originalname);
@@ -23,12 +29,6 @@ const storage = multer.diskStorage({
             return callback(new Error( "Vous ne pouvez télécharger qu'un fichier image !" ))
         }
         callback(null, true)
-    },
-    //nom et extension du fichier + ajout timestamp pour creation d'un fichier daté
-    filename: (req, file, callback) => {
-        const name = file.originalname.split(' ').join('_');
-        const extension = MIME_TYPES[file.mimetype];
-        callback(null, name + Date.now() + '.' + extension);
     },
     limits: {
         fileSize: 1024 * 1024
