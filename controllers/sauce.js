@@ -63,7 +63,7 @@ exports.createSauces = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-// Middleware pour like et dislike - route L32 
+// Middleware pour like et dislike - route L30 
 exports.sauceLikeOrDislike = (req, res, next) => {
     const like = req.body.like;
     const user = req.body.userId;

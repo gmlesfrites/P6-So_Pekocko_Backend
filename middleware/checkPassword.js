@@ -1,3 +1,4 @@
+// Importation du modèle Password 
 const passwordSchema = require('../models/Password');
 
 //Vérification de la consistance du mot de passe
