@@ -1,5 +1,8 @@
-const Sauce = require("../models/Sauce"); //Importation du modèle sauce
-const filesystem = require('fs'); //Importation du package fs(gestion fichiers importés)
+//Importation du modèle sauce
+const Sauce = require("../models/Sauce"); 
+
+//Importation du package fs(gestion fichiers importés)
+const filesystem = require('fs'); 
 
 //Middleware de création d'une sauce - route L15
 exports.createSauce = (req, res, next) => {
@@ -46,8 +49,8 @@ exports.deleteSauce = (req, res, next) => {
             //suppression du fichier image puis de la sauce
             filesystem.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({ _id: req.params.id })
-                    .then(() => { res.status(200).json({ message: 'Sauce supprimée!' }); })
-                    .catch((error) => { res.status(400).json({ error: error }); });
+                    .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
+                    .catch(error => res.status(400).json({ error }));
             })
         })
         .catch(error => res.status(500).json({ error }));
